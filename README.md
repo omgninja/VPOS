@@ -4,7 +4,7 @@
 
 # Virtual Production Operating System
 
-VPOS is a software framework for camera-side virtual production development. It is a module system, inspired by Robot Operating System (ROS) that enables developers to quickly build custom applications for VP data.
+VPOS is a software framework for camera-side virtual production development. It is a modular framework, inspired by Robot Operating System (ROS), designed to be run on a Mini PC or embedded computing platform, that enables developers to quickly build custom applications for VP data
 
 
 

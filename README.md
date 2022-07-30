@@ -9,6 +9,7 @@ VPOS is a software framework for camera-side virtual production development. It 
 
 
 ![CC BY-NC-SA 4.0 License](https://mirrors.creativecommons.org/presskit/buttons/80x15/svg/by-nc-sa.svg)
+Contact for commercial licensing
 
 
 ## Features
@@ -20,6 +21,7 @@ VPOS is a software framework for camera-side virtual production development. It 
 
 
 ## Usage/Examples
+There is a template to get started writing your own modules.
 Vposlaunch.js is the launch file, and modules are launched from here. VPOS is launched with:
 
 **npm run start**

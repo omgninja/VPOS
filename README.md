@@ -4,7 +4,7 @@
 
 # Virtual Production Operating System
 
-VPOS is a software framework for camera-side virtual production development. It is a modular framework, inspired by Robot Operating System (ROS), designed to be run on a Mini PC or embedded computing platform, that enables developers to quickly build custom applications for VP data
+VPOS is a NodeJS software framework for camera-side virtual production development. It is a modular framework, inspired by Robot Operating System (ROS), designed to be run on a Mini PC or embedded computing platform, that enables developers to quickly build custom applications for VP data
 
 
 
@@ -21,6 +21,8 @@ Contact for commercial licensing
 
 
 ## Usage/Examples
+Install NodeJS, clone the repo, and *npm install* to install the modules.
+
 There is a template to get started writing your own modules.
 Vposlaunch.js is the launch file, and modules are launched from here. VPOS is launched with:
 

@@ -15,6 +15,7 @@ var udp = require('dgram');
 const io = require("socket.io-client");
 const URL = "http://localhost:3031";
 const socket = io(URL);
+const { networkInterfaces } = require('os');
 
 
 
@@ -25,6 +26,23 @@ console.log("Args2:" + process.argv[2]);
 var device = new HID.HID(11914, 61450, process.argv[2]);
 
 var client = udp.createSocket('udp4');
+
+const nets = networkInterfaces();
+const results = Object.create(null); // Or just '{}', an empty object
+
+for (const name of Object.keys(nets)) {
+    for (const net of nets[name]) {
+        // Skip over non-IPv4 and internal (i.e. 127.0.0.1) addresses
+        // 'IPv4' is in Node <= 17, from 18 it's a number 4 or 6
+        const familyV4Value = typeof net.family === 'string' ? 'IPv4' : 4
+        if (net.family === familyV4Value && !net.internal) {
+            if (!results[name]) {
+                results[name] = [];
+            }
+            results[name].push(net.address);
+        }
+    }
+}
 
 
 var status = 0;
@@ -83,6 +101,27 @@ var encoderData = {//This is a completed LONET2 object and is readable directly 
   // "Timecode": "Free Run"
 };
 
+function sendLonet2(timecode) {
+
+
+  var masterObj = {};
+  masterObj["encoder_data"] = encoderData;
+  sendLonetObject["port"] = 60607;
+  masterObj["port"] = 60608;
+  sendLonetObject["Timecode"] = timecode;
+
+ // socket.emit("sendLonet2", sendLonetObject);//This sends through HW port to LONET2
+  socket.emit("sendLonet2", masterObj);//This sends through SW port to Unreal/Reality Field
+ // socket.emit("logDataToFile",JSON.stringify(masterObj));
+}
+
+socket.on("frameSync", (msg) => {
+ // console.log(msg);
+  sendLonet2(msg);
+}); 
+
+
+
 device.on("data", function (data) {
   var oldCam = camera;
   var oldNum = number;
@@ -93,26 +132,17 @@ device.on("data", function (data) {
   status = data[1];
   position = UnpackRotation(data[2], data[3])
 
-
+  sendLonetObject["DeviceName"] = process.argv[2].substring(10);
   sendLonetObject["RawValue"] = position;
   encoderData["focusRaw"] = position;
 
-  sendLonetObject["cameraName"] = process.argv[2];//Serial
-  encoderData["cameraName"] = process.argv[2];
+  sendLonetObject["cameraName"] = process.argv[2].substring(10);//Serial
+  encoderData["cameraName"] = process.argv[2].substring(10);
 
   var date = new Date();
   sendLonetObject["Timestamp"] = date.toISOString();
   encoderData["Timestamp"] = date.toISOString();
 
-  var masterObj = {};
-  masterObj["encoder_data"] = encoderData;
-
-  sendLonetObject["port"] = 60607;
-  masterObj["port"] = 60608;
-
-  socket.emit("sendLonet2", sendLonetObject);//This sends through HW port to LONET2
-  socket.emit("sendLonet2", masterObj);//This sends through SW port to Unreal/Reality Field
-  socket.emit("logDataToFile",JSON.stringify(masterObj));
 });
 
 

@@ -58,12 +58,15 @@ fs.readdir(directoryPath, function (err, files) {
 
 //fork(path.join(__dirname, 'cookeILensData.js'));
 
+///Framesync output
+fork(path.join(__dirname, 'frameSync.js'));
+
 ///LONET2 output
-//fork(path.join(__dirname, 'lonet2.js'));
+fork(path.join(__dirname, 'lonet2.js'));
 ////
 
 //indiemark encoder detection
-//var indiemarkdetect = require('./indiemarkdetect.js');
+var indiemarkdetect = require('./indiemarkdetect.js');
 ////
 
 ///Data logger 
